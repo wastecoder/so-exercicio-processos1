@@ -24,7 +24,7 @@ public class RedesController {
         if (os.equals("Windows")) {
             process.append("ipconfig");
         } else {
-            process.append("ifconfig");
+            process.append("ip addr");
         }
 
         try {
@@ -35,18 +35,20 @@ public class RedesController {
             BufferedReader buffer = new BufferedReader(leitor);
 
             //Printa apenas o IPv4 no buffer
-            String linha;
+            String linha, primeiraPalavra;
             while ((linha = buffer.readLine()) != null) {
                 if (os.equals("Windows")) {
-                    String[] split = linha.split(":");
-                    if (split[0].contains("IPv4")) {
-                        System.out.println("Endereço IPv4:" + split[1]);
+                    String[] palavras = linha.split(":");
+                    primeiraPalavra = palavras[0];
+                    if (primeiraPalavra.contains("IPv4")) {
+                        System.out.println("Endereço IPv4:" + palavras[1]);
                     }
                 } else {
                     linha = linha.trim();
-                    String[] split = linha.split(" ");
-                    if (split[0].contains("inet")) {
-                        System.out.println("Endereço IPv4: " + split[1]);
+                    String[] palavras = linha.split(" ");
+                    primeiraPalavra = palavras[0];
+                    if (primeiraPalavra.contains("inet") && !primeiraPalavra.contains("inet6")) {
+                        System.out.println("Endereço IPv4: " + palavras[1]);
                     }
                 }
             }
